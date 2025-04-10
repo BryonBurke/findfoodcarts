@@ -25,8 +25,10 @@ app.use(cookieParser());
 app.use(cors({
   origin: [
     'http://localhost:5173', 
+    'http://localhost:5174',
     'http://localhost:3000',
-    'https://findfoodcarts.onrender.com' // Example Render URL
+    'https://findfoodcarts.onrender.com',
+    'https://findfoodcarts-1.onrender.com'
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
