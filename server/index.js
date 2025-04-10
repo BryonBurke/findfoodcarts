@@ -19,6 +19,12 @@ console.log('Environment variables loaded:', {
 
 const app = express();
 
+// Add this middleware VERY early
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] Received request: ${req.method} ${req.originalUrl}`);
+  next(); 
+});
+
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
