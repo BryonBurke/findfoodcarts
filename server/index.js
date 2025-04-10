@@ -8,6 +8,7 @@ import FoodCart from './models/FoodCart.js';
 import authRoutes from './routes/auth.js';
 import foodCartRoutes from './routes/foodCarts.js';
 import cartPodRoutes from './routes/cartPods.js';
+console.log(`[${new Date().toISOString()}] server/index.js execution starting... NODE_ENV=${process.env.NODE_ENV}`);
 
 // Load environment variables
 dotenv.config();
