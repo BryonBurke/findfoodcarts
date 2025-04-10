@@ -24,7 +24,7 @@ router.get('/:id', async (req, res) => {
     const cartPod = await CartPod.findById(req.params.id)
                                  .populate({
                                     path: 'foodCarts', 
-                                    select: '_id name foodType' // Explicitly include _id along with other fields
+                                    select: '_id name foodType images.main.url'
                                  });
 
     if (!cartPod) {

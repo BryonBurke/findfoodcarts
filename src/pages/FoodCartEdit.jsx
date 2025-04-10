@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   Container,
@@ -9,7 +9,10 @@ import {
   MenuItem,
   Grid,
   Paper,
+  IconButton,
+  CircularProgress,
 } from '@mui/material';
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import axiosInstance from '../config/axios';
 import { useCloudinary } from '../contexts/CloudinaryContext';
 
@@ -42,6 +45,13 @@ const FoodCartEdit = () => {
     specials: null,
   });
   const [loading, setLoading] = useState(false);
+
+  const mainFileInputRef = useRef(null);
+  const menuFileInputRef = useRef(null);
+  const specialsFileInputRef = useRef(null);
+  const mainCameraInputRef = useRef(null);
+  const menuCameraInputRef = useRef(null);
+  const specialsCameraInputRef = useRef(null);
 
   useEffect(() => {
     const fetchFoodCart = async () => {
@@ -92,6 +102,11 @@ const FoodCartEdit = () => {
           break;
       }
     }
+    e.target.value = null;
+  };
+
+  const handleButtonClick = (ref) => {
+    ref.current?.click();
   };
 
   const handleSubmit = async (e) => {
@@ -191,67 +206,46 @@ const FoodCartEdit = () => {
           </TextField>
 
           <Grid container spacing={2} sx={{ mt: 2 }}>
-            <Grid item xs={12}>
-              <Paper sx={{ p: 2 }}>
+            <Grid item xs={12} sm={4}>
+              <Paper sx={{ p: 2, textAlign: 'center' }}>
                 <Typography variant="h6" gutterBottom>
                   Main Image
                 </Typography>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => handleImageChange(e, 'main')}
-                />
-                {previewUrls.main && (
-                  <Box sx={{ mt: 2 }}>
-                    <img
-                      src={previewUrls.main}
-                      alt="Main preview"
-                      style={{ maxWidth: '100%', maxHeight: '300px' }}
-                    />
-                  </Box>
-                )}
+                <Box sx={{ border: '1px dashed grey', padding: 1, minHeight: 150, display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 1 }}>
+                  {previewUrls.main ? <img src={previewUrls.main} alt="Main preview" style={{ maxWidth: '100%', maxHeight: '150px' }} /> : <Typography variant="caption">Preview</Typography>}
+                </Box>
+                <input ref={mainFileInputRef} type="file" accept="image/*" hidden onChange={(e) => handleImageChange(e, 'main')} />
+                <input ref={mainCameraInputRef} type="file" accept="image/*" capture="environment" hidden onChange={(e) => handleImageChange(e, 'main')} />
+                <Button variant="outlined" onClick={() => handleButtonClick(mainFileInputRef)} size="small" sx={{ mr: 1 }}>Choose File</Button>
+                <IconButton color="primary" onClick={() => handleButtonClick(mainCameraInputRef)} size="small"><PhotoCamera /></IconButton>
               </Paper>
             </Grid>
-            <Grid item xs={6}>
-              <Paper sx={{ p: 2 }}>
+            <Grid item xs={12} sm={4}>
+              <Paper sx={{ p: 2, textAlign: 'center' }}>
                 <Typography variant="h6" gutterBottom>
                   Menu Image
                 </Typography>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => handleImageChange(e, 'menu')}
-                />
-                {previewUrls.menu && (
-                  <Box sx={{ mt: 2 }}>
-                    <img
-                      src={previewUrls.menu}
-                      alt="Menu preview"
-                      style={{ maxWidth: '100%', maxHeight: '200px' }}
-                    />
-                  </Box>
-                )}
+                <Box sx={{ border: '1px dashed grey', padding: 1, minHeight: 150, display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 1 }}>
+                  {previewUrls.menu ? <img src={previewUrls.menu} alt="Menu preview" style={{ maxWidth: '100%', maxHeight: '150px' }} /> : <Typography variant="caption">Preview</Typography>}
+                </Box>
+                <input ref={menuFileInputRef} type="file" accept="image/*" hidden onChange={(e) => handleImageChange(e, 'menu')} />
+                <input ref={menuCameraInputRef} type="file" accept="image/*" capture="environment" hidden onChange={(e) => handleImageChange(e, 'menu')} />
+                <Button variant="outlined" onClick={() => handleButtonClick(menuFileInputRef)} size="small" sx={{ mr: 1 }}>Choose File</Button>
+                <IconButton color="primary" onClick={() => handleButtonClick(menuCameraInputRef)} size="small"><PhotoCamera /></IconButton>
               </Paper>
             </Grid>
-            <Grid item xs={6}>
-              <Paper sx={{ p: 2 }}>
+            <Grid item xs={12} sm={4}>
+              <Paper sx={{ p: 2, textAlign: 'center' }}>
                 <Typography variant="h6" gutterBottom>
                   Specials Image
                 </Typography>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => handleImageChange(e, 'specials')}
-                />
-                {previewUrls.specials && (
-                  <Box sx={{ mt: 2 }}>
-                    <img
-                      src={previewUrls.specials}
-                      alt="Specials preview"
-                      style={{ maxWidth: '100%', maxHeight: '200px' }}
-                    />
-                  </Box>
-                )}
+                <Box sx={{ border: '1px dashed grey', padding: 1, minHeight: 150, display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 1 }}>
+                  {previewUrls.specials ? <img src={previewUrls.specials} alt="Specials preview" style={{ maxWidth: '100%', maxHeight: '150px' }} /> : <Typography variant="caption">Preview</Typography>}
+                </Box>
+                <input ref={specialsFileInputRef} type="file" accept="image/*" hidden onChange={(e) => handleImageChange(e, 'specials')} />
+                <input ref={specialsCameraInputRef} type="file" accept="image/*" capture="environment" hidden onChange={(e) => handleImageChange(e, 'specials')} />
+                <Button variant="outlined" onClick={() => handleButtonClick(specialsFileInputRef)} size="small" sx={{ mr: 1 }}>Choose File</Button>
+                <IconButton color="primary" onClick={() => handleButtonClick(specialsCameraInputRef)} size="small"><PhotoCamera /></IconButton>
               </Paper>
             </Grid>
           </Grid>
@@ -264,7 +258,7 @@ const FoodCartEdit = () => {
               sx={{ mr: 2 }}
               disabled={loading}
             >
-              {loading ? 'Saving...' : 'Save Changes'}
+              {loading ? <CircularProgress size={24} /> : 'Save Changes'}
             </Button>
             <Button
               variant="outlined"

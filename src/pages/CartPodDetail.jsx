@@ -5,9 +5,11 @@ import {
   Typography,
   Box,
   Button,
-  List,
-  ListItem,
-  ListItemText,
+  Grid,
+  Card,
+  CardContent,
+  CardMedia,
+  CardActionArea,
   IconButton,
   Dialog,
   DialogTitle,
@@ -78,30 +80,47 @@ const CartPodDetail = () => {
           {cartpod.description}
         </Typography>
 
-        <Typography variant="h5" gutterBottom>
+        <Typography variant="h5" gutterBottom sx={{ mt: 4 }}>
           Food Carts
         </Typography>
-        <List>
-          {cartpod.foodCarts?.map((foodCart, index) => {
-            console.log(`Mapping item index: ${index}, id: ${foodCart?._id}`);
-            if (!foodCart || !foodCart._id) {
-                console.warn(`FoodCart at index ${index} is missing or has no _id:`, foodCart);
-                return null;
-            }
-            return (
-              <ListItem
-                key={foodCart._id}
-                button
-                onClick={() => navigate(`/foodcart/${foodCart._id}`)}
-              >
-                <ListItemText
-                  primary={foodCart.name}
-                  secondary={foodCart.foodType}
-                />
-              </ListItem>
-            );
-          })}
-        </List>
+        <Grid container spacing={3}>
+          {cartpod.foodCarts?.length > 0 ? (
+            cartpod.foodCarts.map((foodCart, index) => {
+              console.log(`Mapping item index: ${index}, id: ${foodCart?._id}, name: ${foodCart?.name}, image: ${foodCart?.images?.main?.url}`);
+              if (!foodCart || !foodCart._id) {
+                  console.warn(`FoodCart at index ${index} is missing or has no _id:`, foodCart);
+                  return null;
+              }
+              return (
+                <Grid item key={foodCart._id} xs={12} sm={6} md={4}>
+                  <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                    <CardActionArea onClick={() => navigate(`/foodcart/${foodCart._id}`)} sx={{ flexGrow: 1 }}>
+                      <CardMedia
+                        component="img"
+                        height="140"
+                        image={foodCart.images?.main?.url || 'https://via.placeholder.com/150?text=No+Image'}
+                        alt={foodCart.name}
+                        sx={{ objectFit: 'cover' }}
+                      />
+                      <CardContent sx={{ flexGrow: 1 }}>
+                        <Typography gutterBottom variant="h6" component="div">
+                          {foodCart.name || 'Unnamed Cart'}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          {foodCart.foodType || 'Unknown Type'}
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
+                  </Card>
+                </Grid>
+              );
+            })
+          ) : (
+             <Grid item xs={12}>
+                <Typography sx={{ mt: 2 }}>No food carts found for this pod yet.</Typography>
+             </Grid>
+          )}
+        </Grid>
 
         <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
           <DialogTitle>Delete CartPod</DialogTitle>
