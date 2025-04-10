@@ -23,6 +23,16 @@ const cartPodSchema = new mongoose.Schema({
       index: '2dsphere'
     }
   },
+  images: {
+    main: {
+      url: String,
+      publicId: String
+    },
+    map: {
+      url: String,
+      publicId: String
+    }
+  },
   foodCarts: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'FoodCart'
