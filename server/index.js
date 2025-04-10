@@ -20,29 +20,61 @@ console.log('Environment variables loaded:', {
 
 const app = express();
 
-// Add this middleware VERY early
+// Basic request logger
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] Received request: ${req.method} ${req.originalUrl}`);
   next(); 
 });
 
-// Middleware
-app.use(express.json());
+// Log before body parser
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] Before express.json() for ${req.originalUrl}`);
+  next();
+});
+app.use(express.json()); 
+// Log after body parser
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] After express.json() for ${req.originalUrl}. Body parsed: ${!!req.body}`);
+  next();
+});
+
+// Log before cookie parser
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] Before cookieParser() for ${req.originalUrl}`);
+  next();
+});
 app.use(cookieParser());
+// Log after cookie parser
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] After cookieParser() for ${req.originalUrl}`);
+  next();
+});
+
+// Log before CORS
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] Before CORS for ${req.originalUrl}`);
+  next();
+});
 app.use(cors({
   origin: [
     'http://localhost:5173', 
-    'http://localhost:5174',
+    'http://localhost:5174', 
     'http://localhost:3000',
-    'https://findfoodcarts.onrender.com',
-    'https://findfoodcarts-1.onrender.com'
+    'https://findfoodcarts.onrender.com', 
+    'https://findfoodcarts-1.onrender.com' 
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
+// Log after CORS
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] After CORS for ${req.originalUrl}`);
+  next();
+});
 
 // Mount routes
+console.log(`[${new Date().toISOString()}] Mounting routes...`);
 app.use('/api/auth', authRoutes);
 app.use('/api/foodcarts', foodCartRoutes);
 app.use('/api/cartpods', cartPodRoutes);
