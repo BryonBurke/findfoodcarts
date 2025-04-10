@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      // axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`; // Interceptor handles this now
       // Fetch user data
       axiosInstance.get('/auth/me')
         .then(response => {
@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
         })
         .catch(() => {
           localStorage.removeItem('token');
-          delete axiosInstance.defaults.headers.common['Authorization'];
+          // delete axiosInstance.defaults.headers.common['Authorization']; // Interceptor handles removal implicitly
         })
         .finally(() => setLoading(false));
     } else {
@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
     const response = await axiosInstance.post('/auth/login', { email, password });
     const { token, user } = response.data;
     localStorage.setItem('token', token);
-    axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    // axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`; // Interceptor handles this now
     setUser(user);
   };
 
@@ -38,13 +38,13 @@ export const AuthProvider = ({ children }) => {
     const response = await axiosInstance.post('/auth/register', { name, email, password });
     const { token, user } = response.data;
     localStorage.setItem('token', token);
-    axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    // axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`; // Interceptor handles this now
     setUser(user);
   };
 
   const logout = () => {
     localStorage.removeItem('token');
-    delete axiosInstance.defaults.headers.common['Authorization'];
+    // delete axiosInstance.defaults.headers.common['Authorization']; // Interceptor handles removal implicitly
     setUser(null);
   };
 
