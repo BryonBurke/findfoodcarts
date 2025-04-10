@@ -37,6 +37,7 @@ const Map = () => {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
           setPosition([pos.coords.latitude, pos.coords.longitude]);
+          console.log('Map.jsx: Got user location:', pos.coords.latitude, pos.coords.longitude);
         },
         (err) => {
           console.error('Error getting location:', err);
@@ -49,21 +50,29 @@ const Map = () => {
       console.log('Map.jsx: Fetching cart pods...');
       try {
         setLoading(true);
-        const response = await axiosInstance.get('/cartpods');
+        console.log('Map.jsx: Making API request to:', 'api/cartpods'); // Log the exact URL
+        const response = await axiosInstance.get('cartpods');
         console.log('Map.jsx: API Response Status:', response.status);
+        console.log('Map.jsx: API Response Headers:', JSON.stringify(response.headers, null, 2));
         console.log('Map.jsx: API Response Data:', JSON.stringify(response.data, null, 2)); // Log the raw data
-        
+
         if (Array.isArray(response.data)) {
           setCartPods(response.data);
           console.log(`Map.jsx: Set cartPods state with ${response.data.length} items.`);
         } else {
           setCartPods([]);
-          console.warn('Map.jsx: API response was not an array, setting state to empty.');
+          console.warn('Map.jsx: API response was not an array, setting state to empty.', response.data);
         }
         setError(null);
       } catch (error) {
-        console.error('Map.jsx: Error fetching cart pods:', error.response?.data || error.message);
-        setError('Failed to load cart pods. Please try again later.');
+        console.error('Map.jsx: Error fetching cart pods:', error);
+        console.error('Map.jsx: Error details:', {
+          message: error.message,
+          response: error.response,
+          request: error.request ? 'Request made but no response' : 'No request made',
+          config: error.config
+        });
+        setError(`Failed to load cart pods: ${error.message}`);
         setCartPods([]);
       } finally {
         setLoading(false);
