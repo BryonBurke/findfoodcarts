@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import { Button, Box, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axiosInstance from '../config/axios';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
@@ -22,11 +22,6 @@ const userIcon = new L.Icon({
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
   shadowSize: [41, 41]
-});
-
-// Create axios instance with base URL
-const api = axios.create({
-  baseURL: 'http://localhost:3000/api'
 });
 
 const Map = () => {
@@ -53,7 +48,7 @@ const Map = () => {
     const fetchCartPods = async () => {
       try {
         setLoading(true);
-        const response = await api.get('/cartpods');
+        const response = await axiosInstance.get('/cartpods');
         if (Array.isArray(response.data)) {
           setCartPods(response.data);
         } else {
