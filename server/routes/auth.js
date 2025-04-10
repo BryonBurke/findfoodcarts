@@ -6,6 +6,7 @@ import { resetPasswordTemplate } from '../templates/resetPassword.js';
 import User from '../models/User.js';
 
 const router = express.Router();
+console.log('[auth.js] Router file loaded'); // Log router load
 
 // Get current user
 router.get('/me', async (req, res) => {
@@ -35,6 +36,7 @@ router.get('/me', async (req, res) => {
 
 // Login
 router.post('/login', async (req, res) => {
+  console.log('[POST /login] Request received'); // Log entry into route handler
   try {
     const { email, password } = req.body;
     console.log('Login attempt for:', email);
