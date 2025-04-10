@@ -22,9 +22,11 @@ router.get('/', async (req, res) => {
   try {
     // Optionally filter for active pods if there's an 'isActive' field, or just get all
     const cartPods = await CartPod.find().sort({ createdAt: -1 }); // Sort by creation date
+    // Log the data before sending
+    console.log(`[GET /api/cartpods] Data found:`, JSON.stringify(cartPods, null, 2)); 
     res.json(cartPods);
   } catch (error) {
-    console.error('Error fetching cart pods:', error);
+    console.error('[GET /api/cartpods] Error fetching cart pods:', error); // Enhanced log
     res.status(500).json({ message: 'Server error fetching cart pods' });
   }
 });
