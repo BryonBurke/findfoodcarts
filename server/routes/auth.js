@@ -61,6 +61,7 @@ router.post('/login', async (req, res) => {
     );
 
     console.log('Login successful for:', email);
+    console.log(`[POST /login] Attempting to send response. Token length: ${token?.length}, User: ${JSON.stringify(user)}`);
     res.json({ token, user: { email: user.email } });
   } catch (error) {
     console.error('Login error:', error);
