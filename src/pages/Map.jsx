@@ -46,18 +46,23 @@ const Map = () => {
 
     // Fetch cart pods
     const fetchCartPods = async () => {
+      console.log('Map.jsx: Fetching cart pods...');
       try {
         setLoading(true);
         const response = await axiosInstance.get('/cartpods');
+        console.log('Map.jsx: API Response Status:', response.status);
+        console.log('Map.jsx: API Response Data:', JSON.stringify(response.data, null, 2)); // Log the raw data
+        
         if (Array.isArray(response.data)) {
           setCartPods(response.data);
+          console.log(`Map.jsx: Set cartPods state with ${response.data.length} items.`);
         } else {
           setCartPods([]);
-          console.warn('Unexpected API response format:', response.data);
+          console.warn('Map.jsx: API response was not an array, setting state to empty.');
         }
         setError(null);
       } catch (error) {
-        console.error('Error fetching cart pods:', error);
+        console.error('Map.jsx: Error fetching cart pods:', error.response?.data || error.message);
         setError('Failed to load cart pods. Please try again later.');
         setCartPods([]);
       } finally {
