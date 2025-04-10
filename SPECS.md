@@ -56,6 +56,7 @@ The CartPod model has exactly these fields and no others:
 ```javascript
 {
   name: String,        // required
+  description: String, // required
   location: {
     type: {
       type: String,
@@ -100,5 +101,6 @@ All endpoints should only handle these exact fields:
 ## Frontend Components
 CartPodNew and CartPodEdit components should only handle:
 - name input
+- description input
 - location selection (map picker)
 - Two image uploads (main, map) 
